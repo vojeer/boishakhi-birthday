@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Happy Birthday Boishakhi ❤️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     :root {
       --gold: #d4a853;
@@ -15,39 +20,59 @@
       --plum: #2d0a1e;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: "Cormorant Garamond", serif;
       background: var(--deep);
       color: white;
       overflow-x: hidden;
-      cursor: none;
+      /* Default cursor for mobile; updated via media query for desktop */
+      cursor: auto; 
     }
 
-    /* ── Custom Cursor ── */
-    .cursor {
-      position: fixed;
-      width: 12px; height: 12px;
-      background: var(--rose);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, background 0.3s;
-      mix-blend-mode: screen;
+    /* ── Custom Cursor (Only active on devices with a mouse) ── */
+    .cursor, .cursor-ring {
+      display: none; /* Hidden by default for mobile */
     }
-    .cursor-ring {
-      position: fixed;
-      width: 36px; height: 36px;
-      border: 1px solid rgba(212,168,83,0.6);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: all 0.25s ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      body {
+        cursor: none;
+      }
+      .cursor {
+        display: block;
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background: var(--rose);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: transform 0.1s, background 0.3s;
+        mix-blend-mode: screen;
+      }
+      .cursor-ring {
+        display: block;
+        position: fixed;
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(212, 168, 83, 0.6);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition: all 0.25s ease-out;
+      }
     }
 
     /* ── Floating Particles ── */
@@ -58,58 +83,70 @@
       z-index: 1;
       overflow: hidden;
     }
+
     .particle {
       position: absolute;
       border-radius: 50%;
       animation: floatUp linear infinite;
       opacity: 0;
     }
+
     @keyframes floatUp {
-      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 0.6; }
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 0.6; }
       100% { transform: translateY(-10vh) scale(1); opacity: 0; }
     }
 
     /* ── Progress Bar ── */
     .progress-bar {
       position: fixed;
-      top: 0; left: 0;
-      height: 2px;
+      top: 0;
+      left: 0;
+      height: 3px;
       background: linear-gradient(90deg, var(--rose), var(--gold));
       z-index: 1000;
       transition: width 0.1s;
-      box-shadow: 0 0 10px var(--rose);
+      box-shadow: 0 0 15px var(--rose);
     }
 
-    /* ── Section Nav Dots ── */
+    /* ── Section Nav Dots (Mobile Optimized) ── */
     .nav-dots {
       position: fixed;
-      right: 24px;
+      right: 16px;
       top: 50%;
       transform: translateY(-50%);
       z-index: 1000;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
+
     .nav-dot {
-      width: 6px; height: 6px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.3);
-      border: 1px solid rgba(212,168,83,0.4);
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(212, 168, 83, 0.3);
       cursor: pointer;
       transition: all 0.4s;
     }
+
     .nav-dot.active {
       background: var(--gold);
-      box-shadow: 0 0 8px var(--gold);
-      transform: scale(1.5);
+      box-shadow: 0 0 10px var(--gold);
+      transform: scale(1.4);
+    }
+
+    @media (min-width: 768px) {
+      .nav-dots { right: 32px; gap: 16px; }
+      .nav-dot { width: 10px; height: 10px; }
     }
 
     /* ── SECTIONS ── */
     .section {
       height: 100vh;
+      height: 100dvh; /* Better mobile height handling */
       position: relative;
       overflow: hidden;
       display: flex;
@@ -123,35 +160,19 @@
       background-size: cover;
       background-position: center;
       will-change: transform;
-      transform: scale(1.08);
-      transition: transform 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform: scale(1.1);
+      transition: transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .section.visible .scene-bg {
       transform: scale(1);
     }
 
-    /* Cinematic overlay per section */
+    /* Cinematic overlays */
     .cinematic-overlay {
       position: absolute;
       inset: 0;
       z-index: 1;
-    }
-
-    /* Letterbox bars */
-    .letterbox-top, .letterbox-bottom {
-      position: absolute;
-      left: 0; right: 0;
-      height: 60px;
-      background: #000;
-      z-index: 10;
-      transition: height 1s ease;
-    }
-    .letterbox-top { top: 0; }
-    .letterbox-bottom { bottom: 0; }
-    .section.visible .letterbox-top,
-    .section.visible .letterbox-bottom {
-      height: 0;
     }
 
     /* ── Text Content ── */
@@ -159,24 +180,26 @@
       position: relative;
       z-index: 5;
       text-align: center;
-      padding: 40px 24px;
+      padding: 30px 20px;
+      width: 100%;
+      max-width: 800px;
     }
 
     .section-label {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 10px;
-      font-weight: 300;
-      letter-spacing: 6px;
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(8px, 2vw, 12px);
+      font-weight: 400;
+      letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--gold);
       opacity: 0;
       transform: translateY(20px);
       transition: all 0.8s ease 0.2s;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .main-title {
-      font-size: clamp(32px, 7vw, 80px);
+      font-size: clamp(36px, 8vw, 85px);
       font-weight: 300;
       font-style: italic;
       line-height: 1.1;
@@ -184,27 +207,35 @@
       opacity: 0;
       transform: translateY(40px);
       transition: all 1s ease 0.5s;
-      text-shadow: 0 0 60px rgba(232, 99, 122, 0.5);
+      text-shadow: 0 0 40px rgba(232, 99, 122, 0.6);
       margin-bottom: 16px;
+      /* Add subtle floating to main text */
+      animation: floatText 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-8px); }
     }
 
     .sub-text {
-      font-family: 'Montserrat', sans-serif;
-      font-size: clamp(12px, 2vw, 16px);
-      font-weight: 200;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.65);
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(14px, 3vw, 18px);
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.8);
       opacity: 0;
       transform: translateY(20px);
       transition: all 0.8s ease 0.9s;
       margin-bottom: 30px;
+      line-height: 1.6;
     }
 
     .divider {
       width: 0;
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
       transition: width 1s ease 0.7s;
     }
 
@@ -214,37 +245,23 @@
       opacity: 1;
       transform: translateY(0);
     }
-    .section.visible .divider { width: 120px; }
 
-    /* ── Section 1: Opening ── */
-    #s1 .cinematic-overlay {
-      background: radial-gradient(ellipse at 50% 60%, rgba(45,10,30,0.4) 0%, rgba(10,6,8,0.75) 100%);
+    .section.visible .divider {
+      width: 60%;
+      max-width: 150px;
     }
 
-    /* ── Section 2 ── */
-    #s2 .cinematic-overlay {
-      background: linear-gradient(135deg, rgba(10,6,8,0.7) 0%, rgba(45,10,30,0.5) 50%, rgba(10,6,8,0.8) 100%);
-    }
-
-    /* ── Section 3 ── */
-    #s3 .cinematic-overlay {
-      background: radial-gradient(ellipse at 30% 70%, rgba(212,168,83,0.15) 0%, rgba(10,6,8,0.8) 60%);
-    }
-
-    /* ── Section 4 ── */
-    #s4 .cinematic-overlay {
-      background: linear-gradient(to bottom, rgba(10,6,8,0.5) 0%, rgba(232,99,122,0.15) 50%, rgba(10,6,8,0.85) 100%);
-    }
-
-    /* ── Section 5 ── */
-    #s5 .cinematic-overlay {
-      background: radial-gradient(ellipse at 70% 40%, rgba(212,168,83,0.2) 0%, rgba(10,6,8,0.85) 70%);
-    }
+    /* Section Overlays */
+    #s1 .cinematic-overlay { background: radial-gradient(ellipse at center, rgba(45,10,30,0.3) 0%, rgba(10,6,8,0.85) 100%); }
+    #s2 .cinematic-overlay { background: linear-gradient(135deg, rgba(10,6,8,0.6) 0%, rgba(45,10,30,0.4) 50%, rgba(10,6,8,0.85) 100%); }
+    #s3 .cinematic-overlay { background: radial-gradient(ellipse at 30% 70%, rgba(212,168,83,0.15) 0%, rgba(10,6,8,0.85) 70%); }
+    #s4 .cinematic-overlay { background: linear-gradient(to bottom, rgba(10,6,8,0.6) 0%, rgba(232,99,122,0.2) 50%, rgba(10,6,8,0.9) 100%); }
+    #s5 .cinematic-overlay { background: radial-gradient(ellipse at 70% 40%, rgba(212,168,83,0.2) 0%, rgba(10,6,8,0.85) 70%); }
 
     /* Scroll hint */
     .scroll-hint {
       position: absolute;
-      bottom: 32px;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 6;
@@ -255,32 +272,36 @@
       opacity: 0;
       animation: fadeInUp 1s ease 2.5s forwards;
     }
+
     .scroll-hint span {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 9px;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10px;
       letter-spacing: 4px;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.6);
       text-transform: uppercase;
     }
+
     .scroll-arrow {
-      width: 1px;
+      width: 2px;
       height: 40px;
-      background: linear-gradient(to bottom, rgba(212,168,83,0.8), transparent);
+      background: linear-gradient(to bottom, var(--gold), transparent);
       animation: scrollPulse 2s ease-in-out infinite;
     }
+
     @keyframes scrollPulse {
-      0%, 100% { opacity: 0.4; transform: scaleY(1); }
-      50% { opacity: 1; transform: scaleY(1.2); }
+      0%, 100% { opacity: 0.3; transform: scaleY(1); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1.4); transform-origin: top; }
     }
+
     @keyframes fadeInUp {
       to { opacity: 1; }
     }
 
-    /* ── Floating text sparkle ── */
     .sparkle {
       display: inline-block;
       animation: sparkleAnim 2.5s ease-in-out infinite;
     }
+
     @keyframes sparkleAnim {
       0%, 100% { filter: drop-shadow(0 0 4px var(--gold)); }
       50% { filter: drop-shadow(0 0 16px var(--rose)) drop-shadow(0 0 30px var(--gold)); }
@@ -296,114 +317,125 @@
     .final-bg {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(232,99,122,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 50%, rgba(212,168,83,0.1) 0%, transparent 60%),
-        radial-gradient(ellipse at 50% 50%, rgba(45,10,30,0.8) 0%, var(--deep) 70%);
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(232, 99, 122, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(212, 168, 83, 0.15) 0%, transparent 50%),
+        rgba(10, 6, 8, 0.9);
     }
 
     .final-content {
       position: relative;
       z-index: 5;
       text-align: center;
-      padding: 40px 24px;
+      padding: 20px;
+      width: 100%;
     }
 
     .heart-burst {
-      font-size: 56px;
+      font-size: clamp(40px, 10vw, 70px);
       animation: heartbeat 1.4s ease-in-out infinite;
       display: block;
-      margin-bottom: 24px;
-      filter: drop-shadow(0 0 20px rgba(232,99,122,0.8));
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 25px rgba(232, 99, 122, 0.9));
     }
+
     @keyframes heartbeat {
       0%, 100% { transform: scale(1); }
-      14% { transform: scale(1.18); }
+      14% { transform: scale(1.2); }
       28% { transform: scale(1); }
-      42% { transform: scale(1.1); }
+      42% { transform: scale(1.15); }
       56% { transform: scale(1); }
     }
 
     .final-title {
-      font-size: clamp(36px, 8vw, 96px);
+      font-size: clamp(32px, 8vw, 80px);
       font-weight: 300;
       font-style: italic;
-      letter-spacing: -2px;
-      line-height: 1;
+      letter-spacing: -1px;
+      line-height: 1.2;
       background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 40%, var(--rose) 70%, var(--blush) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       opacity: 0;
       transform: translateY(30px);
       transition: all 1s ease 0.3s;
     }
 
     .final-name {
-      font-size: clamp(48px, 10vw, 120px);
+      font-size: clamp(45px, 14vw, 130px);
       font-weight: 600;
       font-style: italic;
-      letter-spacing: -3px;
-      line-height: 1;
+      letter-spacing: -2px;
+      line-height: 1.1;
       background: linear-gradient(135deg, var(--gold), var(--rose), var(--blush));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(212,168,83,0.5));
-      margin-bottom: 32px;
+      filter: drop-shadow(0 0 30px rgba(212, 168, 83, 0.4));
+      margin-bottom: 40px;
       opacity: 0;
       transform: translateY(30px);
       transition: all 1.2s ease 0.6s;
     }
 
     #sfinal.visible .final-title,
-    #sfinal.visible .final-name { opacity: 1; transform: translateY(0); }
+    #sfinal.visible .final-name {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
+    /* CELEBRATE BUTTON */
     .music-btn {
       position: relative;
       padding: 0;
       border: none;
       background: none;
-      cursor: none;
       outline: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .music-btn { cursor: none; }
     }
 
     .btn-inner {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 14px 36px;
-      background: linear-gradient(135deg, rgba(212,168,83,0.15), rgba(232,99,122,0.15));
-      border: 1px solid rgba(212,168,83,0.4);
+      padding: 16px 40px;
+      background: linear-gradient(135deg, rgba(212, 168, 83, 0.2), rgba(232, 99, 122, 0.2));
+      border: 1px solid rgba(212, 168, 83, 0.6);
       border-radius: 50px;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 11px;
-      font-weight: 300;
-      letter-spacing: 4px;
+      font-family: "Montserrat", sans-serif;
+      font-size: clamp(12px, 3vw, 14px);
+      font-weight: 500;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--gold);
-      transition: all 0.5s ease;
+      color: var(--cream);
+      transition: all 0.4s ease;
       backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    .btn-inner:hover {
-      background: linear-gradient(135deg, rgba(212,168,83,0.3), rgba(232,99,122,0.3));
+    .btn-inner:hover, .music-btn:active .btn-inner {
+      background: linear-gradient(135deg, rgba(212, 168, 83, 0.4), rgba(232, 99, 122, 0.4));
       border-color: var(--gold);
-      box-shadow: 0 0 30px rgba(212,168,83,0.3), inset 0 0 20px rgba(212,168,83,0.05);
-      letter-spacing: 6px;
+      box-shadow: 0 0 40px rgba(212, 168, 83, 0.5), inset 0 0 20px rgba(212, 168, 83, 0.2);
+      transform: translateY(-2px);
     }
 
     .btn-pulse {
       position: absolute;
-      inset: -4px;
-      border-radius: 54px;
-      border: 1px solid rgba(212,168,83,0.3);
+      inset: -6px;
+      border-radius: 60px;
+      border: 2px solid rgba(212, 168, 83, 0.5);
       animation: btnPulse 2s ease-out infinite;
     }
+
     @keyframes btnPulse {
-      0% { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(1.15); opacity: 0; }
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.2); opacity: 0; }
     }
 
     /* ── Floating rose petals ── */
@@ -411,165 +443,62 @@
       position: fixed;
       pointer-events: none;
       z-index: 2;
-      font-size: 14px;
+      font-size: clamp(12px, 4vw, 20px);
       animation: petalFall linear infinite;
       opacity: 0;
     }
+
     @keyframes petalFall {
-      0% { transform: translateY(-5vh) rotate(0deg) translateX(0); opacity: 0; }
-      10% { opacity: 0.7; }
-      90% { opacity: 0.3; }
-      100% { transform: translateY(105vh) rotate(720deg) translateX(60px); opacity: 0; }
-    }
-
-    /* ── Light rays ── */
-    .light-ray {
-      position: absolute;
-      top: -20%;
-      width: 1px;
-      height: 140%;
-      background: linear-gradient(to bottom, rgba(212,168,83,0.0), rgba(212,168,83,0.08), rgba(212,168,83,0.0));
-      transform-origin: top center;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    /* ── MOBILE-FIRST: Touch Ripple ── */
-    .touch-ripple {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 500;
-      transform: translate(-50%, -50%) scale(0);
-      animation: rippleOut 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    @keyframes rippleOut {
-      0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.7; }
-      100% { transform: translate(-50%, -50%) scale(6); opacity: 0; }
-    }
-
-    /* ── Scroll Color Flash Overlay ── */
-    #scroll-flash {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 50;
-      opacity: 0;
-      mix-blend-mode: screen;
-      transition: opacity 0.05s;
-    }
-
-    /* ── Scroll Color Streak ── */
-    .scroll-streak {
-      position: fixed;
-      pointer-events: none;
-      z-index: 60;
-      border-radius: 50%;
-      mix-blend-mode: screen;
-      opacity: 0;
-      animation: streakFade 0.7s ease-out forwards;
-    }
-    @keyframes streakFade {
-      0%   { opacity: 0.8; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-40px) scale(2.5); }
-    }
-
-    /* ── Scroll Aurora ── */
-    #aurora {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 3;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    #aurora canvas {
-      width: 100%; height: 100%;
-    }
-
-    /* ── Swipe Color Wave (mobile) ── */
-    .swipe-wave {
-      position: fixed;
-      left: 0; right: 0;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 55;
-      opacity: 0;
-      animation: swipeWave 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-    @keyframes swipeWave {
-      0%   { opacity: 0.5; clip-path: inset(0 0 100% 0); }
-      40%  { opacity: 0.3; clip-path: inset(0 0 0% 0); }
-      100% { opacity: 0; clip-path: inset(0 0 0% 0); }
-    }
-
-    /* ── Scroll Side Glow ── */
-    .side-glow {
-      position: fixed;
-      top: 0; bottom: 0;
-      width: 80px;
-      pointer-events: none;
-      z-index: 40;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    #glow-left  { left: 0; }
-    #glow-right { right: 0; }
-
-    /* ── Noise texture ── */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      opacity: 0.03;
-      pointer-events: none;
-      z-index: 100;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    }
-
-    /* ── Glowing vignette ── */
-    .vignette {
-      position: absolute;
-      inset: 0;
-      box-shadow: inset 0 0 150px rgba(0,0,0,0.6);
-      z-index: 3;
-      pointer-events: none;
+      0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(110vh) rotate(720deg) translateX(80px); opacity: 0; }
     }
 
     /* Message toast */
     .toast {
       position: fixed;
-      bottom: 40px;
+      bottom: 30px;
       left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: rgba(212,168,83,0.1);
-      border: 1px solid rgba(212,168,83,0.3);
-      backdrop-filter: blur(20px);
-      padding: 16px 32px;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(212, 168, 83, 0.15);
+      border: 1px solid rgba(212, 168, 83, 0.4);
+      backdrop-filter: blur(25px);
+      padding: 14px 28px;
       border-radius: 50px;
-      font-family: 'Cormorant Garamond', serif;
+      font-family: "Cormorant Garamond", serif;
       font-style: italic;
-      font-size: 16px;
+      font-size: clamp(14px, 4vw, 18px);
       color: var(--cream);
       z-index: 9000;
       transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
+
     .toast.show {
       transform: translateX(-50%) translateY(0);
     }
+    
+    /* Noise Overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 100;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
   </style>
 </head>
-<body>
 
-  <!-- Custom cursor -->
+<body>
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- Progress bar -->
   <div class="progress-bar" id="progressBar"></div>
 
-  <!-- Nav dots -->
   <div class="nav-dots" id="navDots">
     <div class="nav-dot" data-index="0"></div>
     <div class="nav-dot" data-index="1"></div>
@@ -579,35 +508,21 @@
     <div class="nav-dot" data-index="5"></div>
   </div>
 
-  <!-- Scroll color flash overlay -->
-  <div id="scroll-flash"></div>
-  <!-- Aurora layer -->
-  <div id="aurora"><canvas id="auroraCanvas"></canvas></div>
-  <!-- Side glows -->
-  <div class="side-glow" id="glow-left"></div>
-  <div class="side-glow" id="glow-right"></div>
-  <!-- Particles -->
   <div id="particles"></div>
 
-  <!-- Audio -->
   <audio id="music" src="music.mp3" loop></audio>
 
-  <!-- ── SECTION 1 ── -->
   <div class="section" id="s1">
-    <div class="scene-bg" style="background-image: url('images/img1.jpeg');"></div>
+    <div class="scene-bg" style="background-image: url('images/img1.jpeg')"></div>
     <div class="cinematic-overlay"></div>
-    <div class="vignette"></div>
-    <!-- Light rays -->
-    <div class="light-ray" style="left:20%;transform:rotate(-5deg);"></div>
-    <div class="light-ray" style="left:50%;transform:rotate(3deg);"></div>
-    <div class="light-ray" style="left:80%;transform:rotate(-8deg);"></div>
-    <div class="letterbox-top"></div>
-    <div class="letterbox-bottom"></div>
     <div class="text-content">
-      <div class="section-label">A Love Story · Chapter I</div>
-      <h1 class="main-title"><span class="sparkle">Happy Birthday</span><br>Boishakhi <span style="color:var(--rose)">❤️</span></h1>
+      <div class="section-label">A Beautiful Moment · Chapter I</div>
+      <h1 class="main-title">
+        <span class="sparkle">Happy Birthday</span><br />
+        Boishakhi<span style="color: var(--rose)">❤️</span>
+      </h1>
       <div class="divider"></div>
-      <p class="sub-text">You are my most beautiful story...</p>
+      <p class="sub-text">Some people make life feel softer, brighter, and more meaningful...</p>
     </div>
     <div class="scroll-hint">
       <span>Scroll</span>
@@ -615,438 +530,260 @@
     </div>
   </div>
 
-  <!-- ── SECTION 2 ── -->
   <div class="section" id="s2">
-    <div class="scene-bg" style="background-image: url('images/img2.jpeg');"></div>
+    <div class="scene-bg" style="background-image: url('images/img2.jpeg')"></div>
     <div class="cinematic-overlay"></div>
-    <div class="vignette"></div>
-    <div class="light-ray" style="left:30%;transform:rotate(10deg);"></div>
-    <div class="light-ray" style="left:65%;transform:rotate(-6deg);"></div>
-    <div class="letterbox-top"></div>
-    <div class="letterbox-bottom"></div>
     <div class="text-content">
-      <div class="section-label">Chapter II · Light</div>
-      <h1 class="main-title">Your Smile <span class="sparkle" style="font-style:normal">✨</span></h1>
-      <div class="divider"></div>
-      <p class="sub-text">It lights up my entire world</p>
-    </div>
-  </div>
-
-  <!-- ── SECTION 3 ── -->
-  <div class="section" id="s3">
-    <div class="scene-bg" style="background-image: url('images/img3.jpeg');"></div>
-    <div class="cinematic-overlay"></div>
-    <div class="vignette"></div>
-    <div class="light-ray" style="left:15%;transform:rotate(-12deg);"></div>
-    <div class="light-ray" style="left:55%;transform:rotate(4deg);"></div>
-    <div class="light-ray" style="left:85%;transform:rotate(-9deg);"></div>
-    <div class="letterbox-top"></div>
-    <div class="letterbox-bottom"></div>
-    <div class="text-content">
-      <div class="section-label">Chapter III · Magic</div>
+      <div class="section-label">Chapter II · Magic</div>
       <h1 class="main-title">Every Moment</h1>
       <div class="divider"></div>
       <p class="sub-text">With you feels like pure magic</p>
     </div>
   </div>
 
-  <!-- ── SECTION 4 ── -->
-  <div class="section" id="s4">
-    <div class="scene-bg" style="background-image: url('images/img4.jpeg');"></div>
+  <div class="section" id="s3">
+    <div class="scene-bg" style="background-image: url('images/img3.jpeg')"></div>
     <div class="cinematic-overlay"></div>
-    <div class="vignette"></div>
-    <div class="light-ray" style="left:25%;transform:rotate(7deg);"></div>
-    <div class="light-ray" style="left:70%;transform:rotate(-5deg);"></div>
-    <div class="letterbox-top"></div>
-    <div class="letterbox-bottom"></div>
     <div class="text-content">
-      <div class="section-label">Chapter IV · Promise</div>
-      <h1 class="main-title">I Promise <span class="sparkle" style="font-style:normal">❤️</span></h1>
+      <div class="section-label">Chapter III · Happiness</div>
+      <h1 class="main-title">
+        A Beautiful Smile <span class="sparkle" style="font-style: normal">✨</span>
+      </h1>
       <div class="divider"></div>
-      <p class="sub-text">To make you smile forever</p>
+      <p class="sub-text">Some smiles have a way of brightening everything around them</p>
     </div>
   </div>
 
-  <!-- ── SECTION 5 ── -->
-  <div class="section" id="s5">
-    <div class="scene-bg" style="background-image: url('images/img5.jpeg');"></div>
+  <div class="section" id="s4">
+    <div class="scene-bg" style="background-image: url('images/img4.jpeg')"></div>
     <div class="cinematic-overlay"></div>
-    <div class="vignette"></div>
-    <div class="light-ray" style="left:35%;transform:rotate(-3deg);"></div>
-    <div class="light-ray" style="left:60%;transform:rotate(8deg);"></div>
-    <div class="letterbox-top"></div>
-    <div class="letterbox-bottom"></div>
+    <div class="text-content">
+      <div class="section-label">Chapter IV · Beauty</div>
+      <h1 class="main-title">
+        Eyes <span class="sparkle" style="font-style: normal">❤️</span>
+      </h1>
+      <div class="divider"></div>
+      <p class="sub-text">The most beautiful eyes in the world</p>
+    </div>
+  </div>
+
+  <div class="section" id="s5">
+    <div class="scene-bg" style="background-image: url('images/img5.jpeg')"></div>
+    <div class="cinematic-overlay"></div>
     <div class="text-content">
       <div class="section-label">Chapter V · Forever</div>
-      <h1 class="main-title">Love You<br><em>Always</em></h1>
+      <h1 class="main-title">Love You<br /><em>Always</em></h1>
       <div class="divider"></div>
       <p class="sub-text">More than words can ever say...</p>
     </div>
   </div>
 
-  <!-- ── FINAL SECTION ── -->
   <div class="section" id="sfinal">
     <div class="final-bg"></div>
-    <div class="vignette"></div>
     <div class="final-content">
       <span class="heart-burst">❤️</span>
       <div class="final-title">Happy Birthday,</div>
-      <div class="final-name">Boishakhi</div>
-      <button class="music-btn" onclick="playMusic()">
+      <div class="final-name">Shuvii</div>
+      
+      <button class="music-btn" onclick="celebrate()">
         <div class="btn-pulse"></div>
         <div class="btn-inner">
-          <span>♫</span>
-          <span>Play Our Song</span>
+          <span style="font-size: 1.2rem;">🎉</span>
+          <span>Click to Celebrate</span>
         </div>
       </button>
     </div>
   </div>
 
-  <!-- Toast -->
-  <div class="toast" id="toast">Close your eyes and feel the love ❤️</div>
+  <div class="toast" id="toast">Close your eyes and feel the magic ❤️</div>
 
   <script>
-    // ── Cursor ──
-    const cursor = document.getElementById('cursor');
-    const cursorRing = document.getElementById('cursorRing');
+    // ── Cursor Logic (Safeguarded for Desktop Only) ──
+    const cursor = document.getElementById("cursor");
+    const cursorRing = document.getElementById("cursorRing");
     let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx + 'px';
-      cursor.style.top  = my + 'px';
-    });
-    function animRing() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      cursorRing.style.left = rx + 'px';
-      cursorRing.style.top  = ry + 'px';
-      requestAnimationFrame(animRing);
+    
+    // Only track if it's a mouse
+    if (window.matchMedia("(pointer: fine)").matches) {
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+      });
+      function animRing() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        cursorRing.style.left = rx + "px";
+        cursorRing.style.top = ry + "px";
+        requestAnimationFrame(animRing);
+      }
+      animRing();
     }
-    animRing();
 
-    // ── Particles ──
-    const particleContainer = document.getElementById('particles');
-    const colors = ['#e8637a','#d4a853','#f9c5d1','#ffffff','#fdf6ec'];
-    for (let i = 0; i < 40; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
+    // ── Background Particles ──
+    const particleContainer = document.getElementById("particles");
+    const colors = ["#e8637a", "#d4a853", "#f9c5d1", "#ffffff", "#fdf6ec"];
+    // Reduced particle count slightly for mobile performance
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 25 : 40;
+    
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
       const size = Math.random() * 4 + 1;
       p.style.cssText = `
         width:${size}px; height:${size}px;
-        left:${Math.random()*100}%;
-        background:${colors[Math.floor(Math.random()*colors.length)]};
-        animation-duration:${Math.random()*12+8}s;
-        animation-delay:${Math.random()*10}s;
-        box-shadow: 0 0 ${size*3}px ${colors[Math.floor(Math.random()*colors.length)]};
+        left:${Math.random() * 100}%;
+        background:${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration:${Math.random() * 12 + 8}s;
+        animation-delay:${Math.random() * 10}s;
+        box-shadow: 0 0 ${size * 3}px ${colors[Math.floor(Math.random() * colors.length)]};
       `;
       particleContainer.appendChild(p);
     }
 
-    // ── Petals ──
-    const petalEmojis = ['🌸','🌺','✨','🌹','💫'];
-    for (let i = 0; i < 15; i++) {
-      const petal = document.createElement('div');
-      petal.className = 'petal';
+    // ── Falling Petals ──
+    const petalEmojis = ["🌸", "🌺", "✨", "🌹", "💫"];
+    const petalCount = isMobile ? 8 : 15;
+    for (let i = 0; i < petalCount; i++) {
+      const petal = document.createElement("div");
+      petal.className = "petal";
       petal.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
       petal.style.cssText = `
-        left:${Math.random()*100}%;
-        animation-duration:${Math.random()*15+10}s;
-        animation-delay:${Math.random()*15}s;
-        font-size:${Math.random()*12+8}px;
+        left:${Math.random() * 100}%;
+        animation-duration:${Math.random() * 15 + 10}s;
+        animation-delay:${Math.random() * 15}s;
       `;
       document.body.appendChild(petal);
     }
 
     // ── Sections IntersectionObserver ──
-    const sections = document.querySelectorAll('.section');
-    const dots = document.querySelectorAll('.nav-dot');
-    const progressBar = document.getElementById('progressBar');
+    const sections = document.querySelectorAll(".section");
+    const dots = document.querySelectorAll(".nav-dot");
+    const progressBar = document.getElementById("progressBar");
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          const idx = Array.from(sections).indexOf(entry.target);
-          dots.forEach(d => d.classList.remove('active'));
-          if (dots[idx]) dots[idx].classList.add('active');
-        } else {
-          entry.target.classList.remove('visible');
-        }
-      });
-    }, { threshold: 0.55 });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            const idx = Array.from(sections).indexOf(entry.target);
+            dots.forEach((d) => d.classList.remove("active"));
+            if (dots[idx]) dots[idx].classList.add("active");
+          } else {
+            entry.target.classList.remove("visible");
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-    sections.forEach(s => observer.observe(s));
+    sections.forEach((s) => observer.observe(s));
 
     // ── Nav dots click ──
-    dots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        sections[+dot.dataset.index].scrollIntoView({ behavior: 'smooth' });
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        sections[+dot.dataset.index].scrollIntoView({ behavior: "smooth" });
       });
     });
 
     // ── Progress bar on scroll ──
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       const total = document.body.scrollHeight - window.innerHeight;
       const pct = (window.scrollY / total) * 100;
-      progressBar.style.width = pct + '%';
+      progressBar.style.width = pct + "%";
     });
 
     // ── Parallax on scroll ──
-    window.addEventListener('scroll', () => {
+    window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
-      document.querySelectorAll('.scene-bg').forEach((bg, i) => {
+      document.querySelectorAll(".scene-bg").forEach((bg) => {
         const sectionTop = bg.parentElement.offsetTop;
         const offset = (scrollY - sectionTop) * 0.15;
         bg.style.transform = `scale(1.08) translateY(${offset}px)`;
       });
     });
 
-    // ── Music + Toast ──
-    function playMusic() {
-      const audio = document.getElementById('music');
-      audio.play().catch(() => {});
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 4000);
-      // Cursor flash
-      cursor.style.background = '#d4a853';
-      cursor.style.width = '20px';
-      cursor.style.height = '20px';
-      setTimeout(() => {
-        cursor.style.background = 'var(--rose)';
-        cursor.style.width = '12px';
-        cursor.style.height = '12px';
-      }, 800);
+    // ── Celebration Function (Music + Random Confetti Animations) ──
+    function celebrate() {
+      // 1. Play Music
+      const audio = document.getElementById("music");
+      audio.play().catch(() => { console.log("Audio play prevented by browser"); });
+      
+      // 2. Show Toast
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4000);
+      
+      // 3. Cursor effect (desktop only)
+      if (window.matchMedia("(pointer: fine)").matches) {
+        cursor.style.background = "#d4a853";
+        cursor.style.width = "25px";
+        cursor.style.height = "25px";
+        setTimeout(() => {
+          cursor.style.background = "var(--rose)";
+          cursor.style.width = "12px";
+          cursor.style.height = "12px";
+        }, 800);
+      }
+
+      // 4. FIRE RANDOM CONFETTI ANIMATION
+      const animationType = Math.floor(Math.random() * 3); // Picks 0, 1, or 2
+      const myColors = ['#e8637a', '#d4a853', '#f9c5d1', '#ffffff'];
+
+      if (animationType === 0) {
+        // Animation 1: The Original Cannons
+        const duration = 4000;
+        const end = Date.now() + duration;
+
+        (function frame() {
+          confetti({ particleCount: 6, angle: 60, spread: 60, origin: { x: 0, y: 0.8 }, colors: myColors });
+          confetti({ particleCount: 6, angle: 120, spread: 60, origin: { x: 1, y: 0.8 }, colors: myColors });
+          if (Date.now() < end) { requestAnimationFrame(frame); }
+        }());
+        
+      } else if (animationType === 1) {
+        // Animation 2: Fireworks
+        const duration = 4000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0, colors: myColors };
+
+        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+        const interval = setInterval(function() {
+          const timeLeft = animationEnd - Date.now();
+          if (timeLeft <= 0) return clearInterval(interval);
+          const particleCount = 50 * (timeLeft / duration);
+          confetti(Object.assign({}, defaults, { 
+            particleCount, 
+            origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 } 
+          }));
+        }, 250);
+
+      } else {
+        // Animation 3: Massive Center Burst
+        const count = 250;
+        const defaults = { origin: { y: 0.6 }, colors: myColors };
+
+        function fire(particleRatio, opts) {
+          confetti(Object.assign({}, defaults, opts, {
+            particleCount: Math.floor(count * particleRatio)
+          }));
+        }
+
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+      }
     }
 
     // ── Keyboard shortcut ──
-    document.addEventListener('keydown', e => {
-      if (e.key === 'm' || e.key === 'M') playMusic();
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "m" || e.key === "M") celebrate();
     });
-
-    // ═══════════════════════════════════════════════
-    // SCROLL COLOR SYSTEM — Mobile First
-    // ═══════════════════════════════════════════════
-
-    // Theme palette — all match the gold/rose/blush palette
-    const scrollPalette = [
-      { r: 232, g: 99,  b: 122 },  // rose
-      { r: 212, g: 168, b: 83  },  // gold
-      { r: 249, g: 197, b: 209 },  // blush
-      { r: 253, g: 246, b: 236 },  // cream
-      { r: 180, g: 80,  b: 120 },  // deep rose
-      { r: 255, g: 160, b: 180 },  // soft pink
-      { r: 240, g: 200, b: 100 },  // warm yellow
-      { r: 200, g: 100, b: 160 },  // plum-pink
-      { r: 255, g: 220, b: 150 },  // peach gold
-    ];
-
-    function randPaletteColor() {
-      return scrollPalette[Math.floor(Math.random() * scrollPalette.length)];
-    }
-    function toRgba(c, a) { return `rgba(${c.r},${c.g},${c.b},${a})`; }
-
-    // ── Scroll flash overlay ──
-    const flashEl = document.getElementById('scroll-flash');
-    const glowLeft  = document.getElementById('glow-left');
-    const glowRight = document.getElementById('glow-right');
-
-    let lastScrollY = 0;
-    let scrollDir = 1;
-    let flashTimeout = null;
-    let streakThrottle = 0;
-
-    function spawnStreak(x, y, color) {
-      const el = document.createElement('div');
-      el.className = 'scroll-streak';
-      const size = 30 + Math.random() * 60;
-      el.style.cssText = `
-        width:${size}px; height:${size}px;
-        left:${x}px; top:${y}px;
-        background: radial-gradient(circle, ${toRgba(color, 0.9)} 0%, transparent 70%);
-        filter: blur(${size * 0.3}px);
-        box-shadow: 0 0 ${size}px ${toRgba(color, 0.6)};
-      `;
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 750);
-    }
-
-    function spawnSwipeWave(color, dir) {
-      const el = document.createElement('div');
-      el.className = 'swipe-wave';
-      el.style.background = `linear-gradient(to ${dir > 0 ? 'bottom' : 'top'},
-        transparent 0%,
-        ${toRgba(color, 0.12)} 40%,
-        ${toRgba(color, 0.08)} 60%,
-        transparent 100%)`;
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 850);
-    }
-
-    function triggerScrollColors(scrollY, delta) {
-      const c = randPaletteColor();
-      const now = Date.now();
-
-      // Flash overlay — quick pulse
-      flashEl.style.background = `radial-gradient(ellipse at ${30 + Math.random()*40}% ${30 + Math.random()*40}%,
-        ${toRgba(c, 0.18)} 0%, transparent 65%)`;
-      flashEl.style.opacity = '1';
-      clearTimeout(flashTimeout);
-      flashTimeout = setTimeout(() => { flashEl.style.opacity = '0'; }, 180);
-
-      // Side glows
-      const gc = randPaletteColor();
-      glowLeft.style.background  = `linear-gradient(to right, ${toRgba(gc, 0.25)}, transparent)`;
-      glowRight.style.background = `linear-gradient(to left, ${toRgba(randPaletteColor(), 0.2)}, transparent)`;
-      glowLeft.style.opacity  = '1';
-      glowRight.style.opacity = '1';
-      setTimeout(() => { glowLeft.style.opacity = '0'; glowRight.style.opacity = '0'; }, 350);
-
-      // Streaks at random screen positions
-      if (now - streakThrottle > 80) {
-        streakThrottle = now;
-        const count = Math.min(3, Math.floor(Math.abs(delta) / 8) + 1);
-        for (let i = 0; i < count; i++) {
-          const sx = Math.random() * window.innerWidth;
-          const sy = (Math.random() * 0.7 + 0.15) * window.innerHeight;
-          spawnStreak(sx, sy, randPaletteColor());
-        }
-      }
-
-      // Swipe wave (more visible on mobile)
-      if (Math.abs(delta) > 12) {
-        spawnSwipeWave(c, delta);
-      }
-
-      // Progress bar color shift
-      const p2 = randPaletteColor();
-      progressBar.style.background = `linear-gradient(90deg,
-        ${toRgba(c, 1)}, ${toRgba(p2, 1)})`;
-      progressBar.style.boxShadow  = `0 0 12px ${toRgba(c, 0.9)}`;
-    }
-
-    // ── Throttled scroll watcher ──
-    let scrollTick = false;
-    window.addEventListener('scroll', () => {
-      const sy  = window.scrollY;
-      const delta = sy - lastScrollY;
-      scrollDir = delta > 0 ? 1 : -1;
-
-      // Progress bar
-      const total = document.body.scrollHeight - window.innerHeight;
-      progressBar.style.width = (sy / total * 100) + '%';
-
-      // Parallax
-      document.querySelectorAll('.scene-bg').forEach(bg => {
-        const top = bg.parentElement.offsetTop;
-        const off = (sy - top) * 0.15;
-        bg.style.transform = `scale(1.08) translateY(${off}px)`;
-      });
-
-      // Color burst (throttled to every ~60ms for smoothness)
-      if (!scrollTick) {
-        scrollTick = true;
-        setTimeout(() => {
-          triggerScrollColors(sy, delta);
-          scrollTick = false;
-        }, 60);
-      }
-
-      lastScrollY = sy;
-    }, { passive: true });
-
-    // ── MOBILE: Touch ripple on tap ──
-    document.addEventListener('touchstart', e => {
-      const touch = e.touches[0];
-      const c = randPaletteColor();
-      const ripple = document.createElement('div');
-      ripple.className = 'touch-ripple';
-      const size = 80 + Math.random() * 60;
-      ripple.style.cssText = `
-        width: ${size}px; height: ${size}px;
-        left: ${touch.clientX}px; top: ${touch.clientY}px;
-        background: radial-gradient(circle, ${toRgba(c, 0.7)} 0%, transparent 70%);
-        box-shadow: 0 0 30px ${toRgba(c, 0.5)};
-      `;
-      document.body.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 950);
-    }, { passive: true });
-
-    // ── MOBILE: Touch-move color trail ──
-    let touchTrailThrottle = 0;
-    document.addEventListener('touchmove', e => {
-      const now = Date.now();
-      if (now - touchTrailThrottle < 80) return;
-      touchTrailThrottle = now;
-
-      const touch = e.touches[0];
-      const c = randPaletteColor();
-      spawnStreak(touch.clientX, touch.clientY, c);
-
-      // Flash on swipe
-      flashEl.style.background = `radial-gradient(ellipse at ${(touch.clientX/window.innerWidth*100).toFixed(0)}% 50%,
-        ${toRgba(c, 0.2)} 0%, transparent 60%)`;
-      flashEl.style.opacity = '1';
-      setTimeout(() => { flashEl.style.opacity = '0'; }, 200);
-    }, { passive: true });
-
-    // ── Aurora Canvas — ambient drifting color pools ──
-    const auroraEl  = document.getElementById('aurora');
-    const auroraCanvas = document.getElementById('auroraCanvas');
-    const ctx = auroraCanvas.getContext('2d');
-
-    function resizeAurora() {
-      auroraCanvas.width  = window.innerWidth;
-      auroraCanvas.height = window.innerHeight;
-    }
-    resizeAurora();
-    window.addEventListener('resize', resizeAurora);
-
-    // Aurora blobs
-    const blobs = Array.from({ length: 5 }, (_, i) => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: 120 + Math.random() * 180,
-      color: scrollPalette[i % scrollPalette.length],
-      alpha: 0,
-    }));
-
-    let auroraActive = false;
-    let auroraAlpha = 0;
-    let auroraFrame;
-
-    function drawAurora() {
-      ctx.clearRect(0, 0, auroraCanvas.width, auroraCanvas.height);
-      blobs.forEach(b => {
-        b.x += b.vx; b.y += b.vy;
-        if (b.x < -b.r) b.x = auroraCanvas.width + b.r;
-        if (b.x > auroraCanvas.width + b.r) b.x = -b.r;
-        if (b.y < -b.r) b.y = auroraCanvas.height + b.r;
-        if (b.y > auroraCanvas.height + b.r) b.y = -b.r;
-
-        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
-        g.addColorStop(0, `rgba(${b.color.r},${b.color.g},${b.color.b},${auroraAlpha * 0.12})`);
-        g.addColorStop(1, 'transparent');
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      auroraFrame = requestAnimationFrame(drawAurora);
-    }
-
-    // Activate aurora on first scroll
-    let auroraStarted = false;
-    window.addEventListener('scroll', () => {
-      if (!auroraStarted) {
-        auroraStarted = true;
-        auroraEl.style.opacity = '1';
-        auroraAlpha = 1;
-        drawAurora();
-      }
-    }, { passive: true, once: true });
   </script>
 </body>
 </html>
