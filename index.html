@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Boishakhi ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Music -->
+<audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Floating Hearts -->
+<div class="hearts"></div>
+
+<div class="container">
+
+  <h1 class="title">Boishakhi ❤️</h1>
+  <p class="subtitle">Happy Birthday 🎂</p>
+
+  <!-- Typing -->
+  <div class="typing" id="typing-text"></div>
+
+  <!-- Slider -->
+  <div class="slider">
+    <div class="slides">
+      <img src="images/img1.jpeg">
+      <img src="images/img2.jpeg">
+      <img src="images/img3.jpeg">
+      <img src="images/img4.jpeg">
+      <img src="images/img5.jpeg">
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button onclick="playMusic()">🎶</button>
+    <button onclick="openPopup()">💌</button>
+  </div>
+
+</div>
+
+<!-- Popup -->
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <span onclick="closePopup()" class="close">&times;</span>
+    <h2>My Love ❤️</h2>
+    <p>
+      Boishakhi ❤️ <br><br>
+      Tum meri zindagi ka sabse khoobsurat hissa ho.  
+      Tumhari muskaan meri duniya hai.  
+      <br><br>
+      Har din tumhare saath ek naya sapna lagta hai…  
+      aur main chahta hoon ye sapna kabhi khatam na ho.  
+      <br><br>
+      Happy Birthday Jaan 🎉💖
+    </p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

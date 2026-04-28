@@ -1,0 +1,121 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #ff758c, #ff7eb3);
+  color: white;
+  overflow-x: hidden;
+}
+
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-top: 20px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.typing {
+  font-size: 1.2rem;
+  min-height: 40px;
+  margin-bottom: 20px;
+}
+
+/* Slider */
+.slider {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.slides {
+  display: flex;
+  animation: slide 15s infinite;
+}
+
+.slides img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* Animation */
+@keyframes slide {
+  0% {transform: translateX(0);}
+  20% {transform: translateX(0);}
+  25% {transform: translateX(-100%);}
+  45% {transform: translateX(-100%);}
+  50% {transform: translateX(-200%);}
+  70% {transform: translateX(-200%);}
+  75% {transform: translateX(-300%);}
+  95% {transform: translateX(-300%);}
+  100% {transform: translateX(-400%);}
+}
+
+/* Buttons */
+.controls {
+  margin-top: 15px;
+}
+
+.controls button {
+  margin: 5px;
+  padding: 12px;
+  border-radius: 50%;
+  border: none;
+  font-size: 18px;
+}
+
+/* Popup */
+.popup {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  top: 0;
+}
+
+.popup-content {
+  background: white;
+  color: black;
+  margin: 30% auto;
+  padding: 20px;
+  width: 85%;
+  border-radius: 20px;
+}
+
+.close {
+  float: right;
+  font-size: 25px;
+}
+
+/* Floating Hearts */
+.hearts::before {
+  content: "❤️ ❤️ ❤️ ❤️ ❤️ ❤️ ❤️";
+  position: fixed;
+  width: 100%;
+  animation: float 10s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  from {transform: translateY(100vh);}
+  to {transform: translateY(-10vh);}
+}
+
+/* Desktop */
+@media(min-width:768px) {
+  .title { font-size: 3.5rem; }
+  .slides img { height: 400px; }
+}
